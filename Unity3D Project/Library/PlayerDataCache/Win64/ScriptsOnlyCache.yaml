@@ -5,11 +5,14 @@ ScriptsOnlyBuild:
     - BishopPiece
     - Cell
     - ChessBoard
+    - ExitGame
     - KingPiece
     - KnightPiece
     - PawnPiece
     - QeenPiece
     - RockPiece
+    - Room
+    - WaitRoom
     DOTween.dll:
     - DG.Tweening.Core.DOTweenSettings
     Unity.Rider.Editor.dll:
@@ -25,8 +28,85 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
+    - UnityEngine.UI.InputField
+    - UnityEngine.UI.RawImage
     - UnityEngine.UI.Text
   sceneClasses:
+    Assets/_Scenes/StartScene.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 33
+      Script: {instanceID: 0}
+    - Class: 43
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 1484}
+    - Class: 114
+      Script: {instanceID: 2008}
+    - Class: 114
+      Script: {instanceID: 2306}
+    - Class: 114
+      Script: {instanceID: 2420}
+    - Class: 114
+      Script: {instanceID: 2586}
+    - Class: 114
+      Script: {instanceID: 2628}
+    - Class: 114
+      Script: {instanceID: 2770}
+    - Class: 114
+      Script: {instanceID: 2856}
+    - Class: 114
+      Script: {instanceID: 2870}
+    - Class: 114
+      Script: {instanceID: 3166}
+    - Class: 114
+      Script: {instanceID: 3256}
+    - Class: 114
+      Script: {instanceID: 3514}
+    - Class: 114
+      Script: {instanceID: 3584}
+    - Class: 114
+      Script: {instanceID: 4220}
+    - Class: 114
+      Script: {instanceID: 4228}
+    - Class: 114
+      Script: {instanceID: 19886}
+    - Class: 114
+      Script: {instanceID: 420726}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
     Assets/_Scenes/TwoPlayerScene.unity:
     - Class: 1
       Script: {instanceID: 0}
@@ -59,39 +139,92 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1480}
+      Script: {instanceID: 1484}
     - Class: 114
-      Script: {instanceID: 2004}
+      Script: {instanceID: 2008}
     - Class: 114
-      Script: {instanceID: 2294}
+      Script: {instanceID: 2306}
     - Class: 114
-      Script: {instanceID: 2350}
+      Script: {instanceID: 2362}
     - Class: 114
-      Script: {instanceID: 2408}
+      Script: {instanceID: 2420}
     - Class: 114
-      Script: {instanceID: 2574}
+      Script: {instanceID: 2586}
     - Class: 114
-      Script: {instanceID: 2758}
+      Script: {instanceID: 2770}
     - Class: 114
-      Script: {instanceID: 2844}
+      Script: {instanceID: 2856}
     - Class: 114
-      Script: {instanceID: 2858}
+      Script: {instanceID: 2870}
     - Class: 114
-      Script: {instanceID: 2980}
+      Script: {instanceID: 2992}
     - Class: 114
-      Script: {instanceID: 3236}
+      Script: {instanceID: 3256}
     - Class: 114
-      Script: {instanceID: 3494}
+      Script: {instanceID: 3514}
     - Class: 114
-      Script: {instanceID: 3562}
+      Script: {instanceID: 3584}
     - Class: 114
-      Script: {instanceID: 3738}
+      Script: {instanceID: 3766}
     - Class: 114
-      Script: {instanceID: 4186}
+      Script: {instanceID: 4220}
     - Class: 114
-      Script: {instanceID: 4194}
+      Script: {instanceID: 4228}
     - Class: 114
-      Script: {instanceID: 160196}
+      Script: {instanceID: 420726}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
+    Assets/_Scenes/WaitScene.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 108
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 1484}
+    - Class: 114
+      Script: {instanceID: 2008}
+    - Class: 114
+      Script: {instanceID: 2128}
+    - Class: 114
+      Script: {instanceID: 2306}
+    - Class: 114
+      Script: {instanceID: 2420}
+    - Class: 114
+      Script: {instanceID: 2586}
+    - Class: 114
+      Script: {instanceID: 2770}
+    - Class: 114
+      Script: {instanceID: 2856}
+    - Class: 114
+      Script: {instanceID: 21768}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -213,7 +346,7 @@ ScriptsOnlyBuild:
     className: CanvasScaler
   - hash:
       serializedVersion: 2
-      Hash: 7f537b41f7e083c1b6c5ebf642fb2c4e
+      Hash: 31f59f7a3fee8948836f495d4ef733c9
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ChessBoard
@@ -379,6 +512,18 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
     className: PlayerQuitHandler
+  - hash:
+      serializedVersion: 2
+      Hash: 704dcd31abc789439bc3f3cd10b58c2b
+    assemblyName: DOTween.dll
+    namespaceName: DG.Tweening.Core
+    className: DOTweenComponent
+  - hash:
+      serializedVersion: 2
+      Hash: 9b2663563359a91d0a6867fee160c936
+    assemblyName: DOTween.dll
+    namespaceName: DG.Tweening.Core
+    className: DOTweenSettings
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -591,17 +736,31 @@ ScriptsOnlyBuild:
     className: TouchInputModule
   - hash:
       serializedVersion: 2
-      Hash: 704dcd31abc789439bc3f3cd10b58c2b
-    assemblyName: DOTween.dll
-    namespaceName: DG.Tweening.Core
-    className: DOTweenComponent
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: WS_Client
   - hash:
       serializedVersion: 2
-      Hash: 9b2663563359a91d0a6867fee160c936
-    assemblyName: DOTween.dll
-    namespaceName: DG.Tweening.Core
-    className: DOTweenSettings
+      Hash: 7efbc1bdbbf924e1afa35af6c8e51da9
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Room
+  - hash:
+      serializedVersion: 2
+      Hash: 062c9b1b6a5eb08ab1ba1e20094af25a
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: WaitRoom
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ExitGame
   platform: 19
   scenePathNames:
+  - Assets/_Scenes/StartScene.unity
+  - Assets/_Scenes/WaitScene.unity
   - Assets/_Scenes/TwoPlayerScene.unity
-  playerPath: C:/Users/nguye/Desktop/CHESS GAME/CHESS.exe
+  playerPath: C:/Users/nguye/Documents/UNITY/test 1/CHESS NNH.exe

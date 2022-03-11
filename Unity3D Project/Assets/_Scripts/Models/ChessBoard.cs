@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ChessBoard : MonoBehaviour
 {
@@ -12,6 +11,13 @@ public class ChessBoard : MonoBehaviour
     public LayerMask cellLayerMask;
     private Cell _currentHoverCell = null;
     private Cell _currentSelectCell = null;
+    public Text playerText;
+
+    public Camera blackCam;
+    public Camera whiteCam;
+
+    public static string msg;
+    public static bool isOnMove = false;
 
     public Cell[][] Cells { get { return _cells; } }
 
@@ -27,6 +33,21 @@ public class ChessBoard : MonoBehaviour
     {
         current = this;
         Setup();
+
+        string black = "null", white = "null";
+
+        if(!BaseGameCTL.isToggleBlackWhite)
+        {
+            black = BaseGameCTL.Player2_Name;
+            white = BaseGameCTL.Player1_Name;
+        }
+        else
+        {
+            black = BaseGameCTL.Player1_Name;
+            white = BaseGameCTL.Player2_Name;
+        }
+        playerText.text = $"BLACK: {black}\nWHITE: {white}";
+
     }
 
     void Update()
@@ -36,12 +57,34 @@ public class ChessBoard : MonoBehaviour
         {
             CheckUserInput();
         }
+
+        if (isOnMove)
+        {
+            string[] msgArr = msg.Split(' ');
+            int x = int.Parse(msgArr[2].Split(',')[0]);
+            int y = int.Parse(msgArr[2].Split(',')[1]);
+            int xTo = int.Parse(msgArr[3].Split(',')[0]);
+            int yTo = int.Parse(msgArr[3].Split(',')[1]);
+
+            Debug.Log("From (" + x + "," + y + ") to (" + xTo + "," + yTo + ")");
+
+            Cell from = Cells[x][y];
+            Cell to = Cells[xTo][yTo];
+
+            // dich chuyen quan co
+            from.CurrentPiece?.MovePeice(to);
+            from.CurrentPiece = null;
+
+            isOnMove = false;
+        }
     }
 
     public void RestartGame()
     {
-        Scene scene = SceneManager.GetActiveScene(); 
-        SceneManager.LoadScene(scene.name);
+        BaseGameCTL.isToggleBlackWhite = !BaseGameCTL.isToggleBlackWhite;
+        BaseGameCTL.type = BaseGameCTL.type == EPlayer.BLACK ? EPlayer.WHITE : EPlayer.BLACK;
+        //Scene scene = SceneManager.GetActiveScene(); 
+        SceneLoader.Load(SceneLoader.Scene.WaitScene);
     }
 
     void CheckUserInput()
@@ -56,7 +99,6 @@ public class ChessBoard : MonoBehaviour
 
             cell = hit.collider.GetComponent<Cell>();
 
-            Debug.Log(cell.CurrentPiece?.Player.ToString());
 
             // ko hover vao cac cell voi trang thai SUGGEST
             if (cell.State != ECellState.SUGGEST)
@@ -87,48 +129,52 @@ public class ChessBoard : MonoBehaviour
         }
 
 
-        // handle xu kien nhan chuot
-        if (Input.GetMouseButtonDown(0))
+        if (BaseGameCTL.Current.Turn == BaseGameCTL.type)
         {
-            if (_currentHoverCell != null && _currentHoverCell.CurrentPiece != null 
-                && _currentHoverCell.CurrentPiece.Player == BaseGameCTL.Current.Turn)
+            // handle xu kien nhan chuot
+            if (Input.GetMouseButtonDown(0))
             {
-                _currentSelectCell?.SetCellState(ECellState.SELECTED);
-                _currentSelectCell?.CurrentPiece.Unselect();
-                _currentSelectCell = _currentHoverCell;
-                _currentSelectCell?.SetCellState(ECellState.SELECTED);
-
-                if (_currentSelectCell != null)
+                if (_currentHoverCell != null && _currentHoverCell.CurrentPiece != null
+                    && _currentHoverCell.CurrentPiece.Player == BaseGameCTL.Current.Turn)
                 {
-                    Cell c = _currentSelectCell;
-                    //Debug.Log(c.CurrentPiece?.Name + " SELECTED at " + c.transform.position.ToString());
+                    _currentSelectCell?.SetCellState(ECellState.SELECTED);
+                    _currentSelectCell?.CurrentPiece.Unselect();
+                    _currentSelectCell = _currentHoverCell;
+                    _currentSelectCell?.SetCellState(ECellState.SELECTED);
 
-                    // chuyen sang trang thai dang chon nuoc di
-                    EGameState state = BaseGameCTL.Current.GameState;
-                    if (state == EGameState.PLAYING)
+                    if (_currentSelectCell != null)
                     {
-                        BaseGameCTL.Current.GameState = EGameState.SELECTING;
+                        Cell c = _currentSelectCell;
+
+                        // chuyen sang trang thai dang chon nuoc di
+                        EGameState state = BaseGameCTL.Current.GameState;
+                        if (state == EGameState.PLAYING)
+                        {
+                            BaseGameCTL.Current.GameState = EGameState.SELECTING;
+                        }
+                        c.CurrentPiece.OnSelected();
                     }
-                    c.CurrentPiece.OnSelected();
+                }
+
+                if (cell != null && cell.State == ECellState.SUGGEST)
+                {
+                    BaseGameCTL.Current.GameState = EGameState.PLAYING;
+                    BasePiece piece = _currentSelectCell?.CurrentPiece;
+
+                    // send movement to opposite player
+                    Room.SendMove(_currentSelectCell, cell);
+
+                    // Move piece to destination cell
+                    piece?.MovePeice(cell);
+
+                    // unselect current selected cell and deactive suggest cells
+                    _currentSelectCell?.SetCellState(ECellState.SELECTED);
+                    piece.Unselect();
+                    _currentSelectCell.CurrentPiece = null;
+                    _currentSelectCell = null;
                 }
             }
-
-            if(cell != null && cell.State == ECellState.SUGGEST)
-            {
-                BaseGameCTL.Current.GameState = EGameState.PLAYING;
-                BasePiece piece = _currentSelectCell?.CurrentPiece;
-
-                // Move piece to destination cell
-                piece?.MovePeice(cell);
-
-                // unselect current selected cell and deactive suggest cells
-                _currentSelectCell?.SetCellState(ECellState.SELECTED);
-                piece.Unselect();
-                _currentSelectCell.CurrentPiece = null;
-                //cell.CurrentPiece = piece;
-                _currentSelectCell = null;
-            }
-        }   
+        }
 
     }
 
@@ -156,7 +202,7 @@ public class ChessBoard : MonoBehaviour
     public void Setup()
     {
         _cells = new Cell[8][];
-        //pieces = new List<BasePiece>();
+
         int index = 0, pIndex = 0;
         for (int i = 0; i < 8; i++)
         {
@@ -164,13 +210,11 @@ public class ChessBoard : MonoBehaviour
             for (int j = 0; j < 8; j++)
             {
                 Transform obj = this.transform.GetChild(0).GetChild(index++);
-                //obj.transform.parent = this.transform;
 
                 _cells[i][j] = obj.GetComponent<Cell>();
                 _cells[i][j].Location = new Vector2Int(i, j);
             }
         }
-        //_cells[7][6].SetCellState(ECellState.SELECTED);
 
         for(int j = 0; j < 8; j++)
         {
@@ -187,6 +231,17 @@ public class ChessBoard : MonoBehaviour
                     _cells[i][j].CurrentPiece = null;
                 }
             }
+        }
+
+        // Setup black/white camera view
+        if(BaseGameCTL.type == EPlayer.BLACK)
+        {
+            blackCam.gameObject.SetActive(true);
+            whiteCam.gameObject.SetActive(false);
+        } else
+        {
+            blackCam.gameObject.SetActive(false);
+            whiteCam.gameObject.SetActive(true);
         }
 
         Debug.Log("Setup finished");

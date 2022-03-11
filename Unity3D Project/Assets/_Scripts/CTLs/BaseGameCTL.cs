@@ -13,6 +13,13 @@ public class BaseGameCTL : MonoBehaviour
     public Text TurnText;
     public GameObject ResultPanel;
 
+    public static string Player1_Name;
+    public static string Player2_Name;
+    public static string RoomID;
+    public static bool isPlayer1First;
+    public static EPlayer type;
+    public static bool isToggleBlackWhite = false;
+
     public EPlayer Turn
     {
         get { return _turn; }

@@ -1,5 +1,5 @@
 const Websocket = require('ws')
-const wss = new Websocket.Server({ port: 8080 }, () => {
+const wss = new Websocket.Server({ port:process.env.PORT || 8080 }, () => {
     console.log("Server started");
 })
 
@@ -117,5 +117,5 @@ function findRoom(id) {
 }
 
 wss.on('listening', () => {
-    console.log("listening on port 8080");
+    console.log("listening on port ", process.env.PORT);
 })

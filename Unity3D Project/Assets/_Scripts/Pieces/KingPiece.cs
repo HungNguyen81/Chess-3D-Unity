@@ -23,6 +23,13 @@ public class KingPiece : BasePiece
         if (dest.CurrentPiece != null)
         {
             Destroy(dest.CurrentPiece.gameObject);
+
+            GameResult checker = CheckGameOver(dest);
+            if (checker.isOver)
+            {
+                BaseGameCTL.Current.GameState = EGameState.GAME_OVER;
+                BaseGameCTL.Current.Turn = checker.winner;
+            }
         }
         dest.CurrentPiece = this;
 

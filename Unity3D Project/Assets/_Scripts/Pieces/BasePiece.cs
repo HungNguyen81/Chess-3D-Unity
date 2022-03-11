@@ -13,7 +13,6 @@ public abstract class BasePiece : MonoBehaviour
 
     [SerializeField]
     protected EPlayer player;
-    //private Vector2 _originLocation;
 
     public EPlayer Player
     {

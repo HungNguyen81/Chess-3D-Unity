@@ -20,7 +20,7 @@ public class PawnPiece : BasePiece
         // Move to new location
         float duration = 0.5f;
         this.transform.DOMove(this.transform.position + new Vector3(x, y, z), duration);
-        //this.transform.position += new Vector3(x, y, z);
+
         Location = loc;
 
         if (dest.CurrentPiece != null)
