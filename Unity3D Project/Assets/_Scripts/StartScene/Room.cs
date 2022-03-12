@@ -16,6 +16,20 @@ public class Room : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        DontDestroyOnLoad(this.gameObject);
+    }
+
+    private void Update()
+    {
+        if (_isSwitchToWaitRoom)
+        {
+            SceneLoader.Load(SceneLoader.Scene.WaitScene);
+            _isSwitchToWaitRoom = false;
+        }
+    }
+
+    public void SetupWebSock()
+    {
         ws = new WebSocket("ws://stark-coast-49667.herokuapp.com");//localhost:8080");
         Debug.Log("WS Start");
         ws.OnMessage += (sender, e) =>
@@ -36,9 +50,9 @@ public class Room : MonoBehaviour
                 Debug.Log("ID: " + roomID);
                 BaseGameCTL.Player1_Name = nameInput.text;
                 BaseGameCTL.Player2_Name = "";
-                
+
                 _isSwitchToWaitRoom = true;
-            } 
+            }
             else if (code.Equals("JOIN"))
             {
                 BaseGameCTL.RoomID = msg.Split(' ')[1];
@@ -55,11 +69,11 @@ public class Room : MonoBehaviour
                     WaitRoom.isToggleStartBtn = true;
                     Debug.Log("toggle");
                 }
-            } 
+            }
             else if (code.Equals("OK"))
             {
                 WaitRoom.isStartGame = true;
-            } 
+            }
             else if (code.Equals("MOVE"))
             {
                 ChessBoard.isOnMove = true;
@@ -71,16 +85,6 @@ public class Room : MonoBehaviour
             }
         };
         ws.Connect();
-        DontDestroyOnLoad(this.gameObject);
-    }
-
-    private void Update()
-    {
-        if (_isSwitchToWaitRoom)
-        {
-            SceneLoader.Load(SceneLoader.Scene.WaitScene);
-            _isSwitchToWaitRoom = false;
-        }
     }
 
     public static void SendMove(Cell from, Cell to)
@@ -114,6 +118,7 @@ public class Room : MonoBehaviour
 
     public void NewRoom()
     {
+        SetupWebSock();
         string name = nameInput.text;
         nameInput.gameObject.SetActive(false);
 
@@ -123,6 +128,7 @@ public class Room : MonoBehaviour
 
     public void Join()
     {
+        SetupWebSock();
         string name = nameInput.text;
         string roomID = roomIdInput.text;
 

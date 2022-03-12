@@ -36,7 +36,11 @@ wss.on('connection', ws => {
             let roomID = msgArr[1]
 
             if (roomID == "****") { // ROOM **** name
-                let id = `${Math.floor(Math.random() * 10000)}`
+                let id = ''
+                do{
+                    id = `${Math.floor(Math.random() * 10000)}`
+                } while (findRoom(id))
+
                 rooms.push({
                     id: id,
                     ps: [{
@@ -89,19 +93,20 @@ wss.on('connection', ws => {
             console.log("rooms before:", rooms);
             if(room){
                 if(room.ps[0].ws == ws){
-                    room.ps[0] = room.ps[1]
-                    room.ps.splice(1, 1);
-
-                    if(!room.ps[0]) room.ps.splice(0,1)
-                } else if(room.ps[1] && room.ps[1].ws == ws){
+                    // room.ps[0] = room.ps[1]
                     room.ps.splice(0, 1);
+
+                    // if(!room.ps[0]) room.ps.splice(0,1)
+                } else if(room.ps[1] && room.ps[1].ws == ws){
+                    room.ps.splice(1, 1);
                 }
                 console.log(room.ps.length);
                 if(room.ps.length == 0){
-                    let index = rooms.findIndex(obj => obj.id = room.id)
+                    let index = rooms.findIndex(obj => obj.id == room.id)
                     rooms.splice(index,1)
                 } else {
-                    room.ps[0].ws.send(`OUT`)
+                    room.ps[0].ws.send(`OUT ${room.ps[0].name}`)
+                    console.log(`OUT ${room.ps[0].name}`);
                 }
             }
             console.log("rooms after:", rooms);

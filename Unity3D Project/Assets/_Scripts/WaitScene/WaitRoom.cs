@@ -54,6 +54,7 @@ public class WaitRoom : MonoBehaviour
             if (player1Name.text.Equals(playerRest))
             {
                 player2Name.text = "";
+                BaseGameCTL.Player2_Name = "";
             } else
             {
                 player1Name.text = player2Name.text;
@@ -61,6 +62,7 @@ public class WaitRoom : MonoBehaviour
                 BaseGameCTL.Player1_Name = BaseGameCTL.Player2_Name;
                 BaseGameCTL.Player2_Name = "";
             }
+            startButton.gameObject.SetActive(false);
             playerRest = "";
         }
     }
